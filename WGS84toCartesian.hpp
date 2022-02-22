@@ -37,32 +37,32 @@ namespace wgs84 {
  * @return std::array<double, 2> Cartesian position after transforming WGS84Position using the given WGS84Reference using Mercator projection.
  */
 inline std::array<double, 2> toCartesian(const std::array<double, 2> &WGS84Reference, const std::array<double, 2> &WGS84Position) {
-#ifndef M_PI
-    constexpr double M_PI = 3.141592653589793;
+#ifndef L_PI
+    constexpr double L_PI = 3.141592653589793;
 #endif
-    constexpr double DEG_TO_RAD{M_PI / 180.0};
-    constexpr double HALF_PI{M_PI / 2.0};
-    constexpr double EPSILON10{1.0e-10};
-    constexpr double EPSILON12{1.0e-12};
+    constexpr double DEG_TO_RAD{L_PI / 180.0L};
+    constexpr double HALF_PI{L_PI / 2.0L};
+    constexpr double EPSILON10{1.0e-10L};
+    constexpr double EPSILON12{1.0e-12L};
 
-    constexpr double EQUATOR_RADIUS{6378137.0};
-    constexpr double FLATTENING{1.0 / 298.257223563};
-    constexpr double SQUARED_ECCENTRICITY{2.0 * FLATTENING - FLATTENING * FLATTENING};
-    constexpr double SQUARE_ROOT_ONE_MINUS_ECCENTRICITY{0.996647189335};
+    constexpr double EQUATOR_RADIUS{6378137.0L};
+    constexpr double FLATTENING{1.0L / 298.257223563L};
+    constexpr double SQUARED_ECCENTRICITY{2.0L * FLATTENING - FLATTENING * FLATTENING};
+    constexpr double SQUARE_ROOT_ONE_MINUS_ECCENTRICITY{0.996647189335L};
     constexpr double POLE_RADIUS{EQUATOR_RADIUS * SQUARE_ROOT_ONE_MINUS_ECCENTRICITY};
 
-    constexpr double C00{1.0};
-    constexpr double C02{0.25};
-    constexpr double C04{0.046875};
-    constexpr double C06{0.01953125};
-    constexpr double C08{0.01068115234375};
-    constexpr double C22{0.75};
-    constexpr double C44{0.46875};
-    constexpr double C46{0.01302083333333333333};
-    constexpr double C48{0.00712076822916666666};
-    constexpr double C66{0.36458333333333333333};
-    constexpr double C68{0.00569661458333333333};
-    constexpr double C88{0.3076171875};
+    constexpr double C00{1.0L};
+    constexpr double C02{0.25L};
+    constexpr double C04{0.046875L};
+    constexpr double C06{0.01953125L};
+    constexpr double C08{0.01068115234375L};
+    constexpr double C22{0.75L};
+    constexpr double C44{0.46875L};
+    constexpr double C46{0.01302083333333333333L};
+    constexpr double C48{0.00712076822916666666L};
+    constexpr double C66{0.36458333333333333333L};
+    constexpr double C68{0.00569661458333333333L};
+    constexpr double C88{0.3076171875L};
 
     constexpr double R0{C00 - SQUARED_ECCENTRICITY * (C02 + SQUARED_ECCENTRICITY * (C04 + SQUARED_ECCENTRICITY * (C06 + SQUARED_ECCENTRICITY * C08)))};
     constexpr double R1{SQUARED_ECCENTRICITY * (C22 - SQUARED_ECCENTRICITY * (C04 + SQUARED_ECCENTRICITY * (C06 + SQUARED_ECCENTRICITY * C08)))};
