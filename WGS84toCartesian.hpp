@@ -38,10 +38,10 @@ namespace wgs84 {
  */
 inline std::array<double, 2> toCartesian(const std::array<double, 2> &WGS84Reference, const std::array<double, 2> &WGS84Position) {
 #ifndef L_PI
-    constexpr double L_PI = 3.141592653589793;
+    constexpr double L_PI = 3.141592653589793L;
 #endif
-    constexpr double DEG_TO_RAD{L_PI / 180.0L};
-    constexpr double HALF_PI{L_PI / 2.0L};
+    constexpr double L_DEG_TO_RAD{L_PI / 180.0L};
+    constexpr double L_HALF_PI{L_PI / 2.0L};
     constexpr double EPSILON10{1.0e-10L};
     constexpr double EPSILON12{1.0e-12L};
 
@@ -79,7 +79,7 @@ inline std::array<double, 2> toCartesian(const std::array<double, 2> &WGS84Refer
         return (R0 * lat - cos_phi * (R1 + squared_sin_phi * (R2 + squared_sin_phi * (R3 + squared_sin_phi * R4))));
     };
 
-    const double ML0{mlfn(WGS84Reference[0] * DEG_TO_RAD)};
+    const double ML0{mlfn(WGS84Reference[0] * L_DEG_TO_RAD)};
 
     auto msfn = [&](const double &sinPhi, const double &cosPhi, const double &es) { return (cosPhi / std::sqrt(1.0 - es * sinPhi * sinPhi)); };
 
@@ -94,19 +94,19 @@ inline std::array<double, 2> toCartesian(const std::array<double, 2> &WGS84Refer
     };
 
     auto fwd = [&](double lat, double lon) {
-        const double D = std::abs(lat) - HALF_PI;
+        const double D = std::abs(lat) - L_HALF_PI;
         if ((D > EPSILON12) || (std::abs(lon) > 10.0)) {
             return std::array<double, 2>{0.0, 0.0};
         }
         if (std::abs(D) < EPSILON12) {
-            lat = (lat < 0.0) ? -1.0 * HALF_PI : HALF_PI;
+            lat = (lat < 0.0) ? -1.0 * L_HALF_PI : L_HALF_PI;
         }
-        lon -= WGS84Reference[1] * DEG_TO_RAD;
+        lon -= WGS84Reference[1] * L_DEG_TO_RAD;
         const auto projectedRetVal{project(lat, lon)};
         return std::array<double, 2>{EQUATOR_RADIUS * projectedRetVal[0], EQUATOR_RADIUS * projectedRetVal[1]};
     };
 
-    return fwd(WGS84Position[0] * DEG_TO_RAD, WGS84Position[1] * DEG_TO_RAD);
+    return fwd(WGS84Position[0] * L_DEG_TO_RAD, WGS84Position[1] * L_DEG_TO_RAD);
 }
 
 /**
